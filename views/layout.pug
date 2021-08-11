@@ -1,0 +1,25 @@
+html 
+    head    
+        title EduNet 
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    body.bg-light
+        nav.navbar.navbar-expand-lg.navbar-dark(style="background:#718093").shadow-sm
+            .container 
+                a.navbar-brand(href="") EduNet
+                
+                form(action="").mx-auto.d-flex.mt-3
+                    input.form-control(type="search",size=70,placeholder="e.g Php variable, Python, java etc")
+                    input.btn(type="submit",value="Go",style="color:white;background:#192a56")
+
+                ul.navbar-nav.ms-auto 
+                    li.nav-item 
+                        a.nav-link(href="") Home 
+                    li.nav-item 
+                        a.nav-link(href="") About 
+                    li.nav-item 
+                        a.nav-link(href="") Login 
+                    li.nav-item 
+                        a.nav-link(href="") register 
+
+
+        block content  

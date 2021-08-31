@@ -4,52 +4,60 @@ extends layout
 block content 
     .container-fluid.mt-3
         .row 
-            .col-2
+            .col-lg-2(style="position:fixed;height:100vh;overflow:scroll")
+                h5.blockquote(style="border-left:3px solid #718093;padding-left:10px;color:#718093") Study Topics 
                 .list-group.list-group-flush.small
-                    a.list-group-item.list-group-item-action(href="",style="background:#192a56;color:white") Study Topics
                     each cat in topics
-                        a.list-group-item.list-group-item-action(href="") #{cat.title}
+                        a.list-group-item.list-group-item-action.shadow-sm(href="/category/"+cat.id) #{cat.title}
+                            span.float-end &raquo;
                    
 
-            .col-7
-                each post in posts 
-                    .card.mb-2
+            .col-lg-7(style="position:relative;margin-left:220px")
+                if posts.length > 0
+                    if filtered
+                        h1.h5.ms-4 Filtered Page by #{posts[0].title} (#{posts.length})
+                        hr
+                
+                    each post in posts 
+                        .card.mb-2.border-0.shadow-sm
+                            .card-body
+                                .row
+                                    .col-3 
+                                        img(src="/"+post.image, alt="").card-img-top
+                                    .col
+                                        h5 #{post.p_title}
+                                        p.small #{post.content.substr(0,350) + '...'}
+                                        a.btn.btn-sm.float-end(style="background:#192a56;color:white",href="/post/"+post.p_id) Read More >>
+                            .card-footer.bg-muted.border-top-0
+                                .row 
+                                    small.col-2
+                                        span.text-muted.px-3
+                                            i.bi.bi-eye 
+                                            span #{post.visit_times}
+                                    small.col-3
+                                        span.text-muted 
+                                            i.bi.bi-person 
+                                            span #{post.author}
+                                    small.col
+                                        span.text-muted 
+                                            i.bi.bi-clock 
+                                            span #{post.date}
+                                    small.col
+                                        span.text-muted 
+                                            i.bi.bi-list 
+                                            span #{post.title}
+                else 
+                    .card 
                         .card-body 
-                            .row 
-                                .col-3 
-                                    img(src="https://via.placeholder.com/150x150", alt="")
-                                .col 
-                                    h5 #{post.p_title}
-                                    p.small #{post.content}
-                                    a.btn.btn-sm.float-end(style="background:#192a56;color:white") Read More >>
+                            h2 Not Found
+                                    
             
-            .col-3
-                .list-group 
-                    a.list-group-item.list-group-item-action(href="")
-                        .d-flex.w-100.justify-content-between 
-                            h5.mb-1 list group heading 
-                            small 3 day ago 
-                        p.mb-1 Lorem, ipsum dolor sit amet consectetur adipisicing elit. ur, hic vitae!
-                        small and some more text 
-                        
-                    a.list-group-item.list-group-item-action(href="")
-                        .d-flex.w-100.justify-content-between 
-                            h5.mb-1 list group heading 
-                            small 3 day ago 
-                        p.mb-1 Lorem, ipsum dolor sit amet consectetur adipisicing elit. ur, hic vitae!
-                        small and some more text 
-                        
-                    a.list-group-item.list-group-item-action(href="")
-                        .d-flex.w-100.justify-content-between 
-                            h5.mb-1 list group heading 
-                            small 3 day ago 
-                        p.mb-1 Lorem, ipsum dolor sit amet consectetur adipisicing elit. ur, hic vitae!
-                        small and some more text 
-                        
-                    a.list-group-item.list-group-item-action(href="")
-                        .d-flex.w-100.justify-content-between 
-                            h5.mb-1 list group heading 
-                            small 3 day ago 
-                        p.mb-1 Lorem, ipsum dolor sit amet consectetur adipisicing elit. ur, hic vitae!
-                        small and some more text 
-                        
+            .col-lg-3(style="position:fixed;height:100vh;overflow:scroll;right:0")
+                h5.blockquote(style="border-left:3px solid #718093;padding-left:10px;color:#718093") Popular Posts 
+                .list-group
+                    each p in top_post
+                        a.list-group-item.list-group-item-action(href="").border-0.shadow-sm.mb-2
+                            .d-flex.w-100.justify-content-between 
+                                h6.mb-1.text-truncate.text-secondary.text-uppercase #{p.p_title}
+                                small.col-2.text-muted(style="font-size:10px") 3 day ago
+                            small.text-muted(style="font-size:12px") By: #{p.author}

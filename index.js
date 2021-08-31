@@ -1,7 +1,6 @@
 var express  = require('express')
 var app = express()
 var session = require("express-session")
-var upload = multer()
 
 var flash = require("express-flash")
 var cookie = require("cookie-parser")
@@ -9,6 +8,7 @@ var route = require("./url.js");
 
 //static directories
 app.use(express.static("public"));
+app.use(express.static("photos"));
 
 
 
@@ -27,9 +27,6 @@ app.use(express.urlencoded({extended:true}))
 //session and cookie
 app.use(flash())
 app.use(cookie())
-
-//form-multipart form data
-app.use(upload.array());
 
 
 

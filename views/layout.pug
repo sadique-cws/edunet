@@ -1,10 +1,11 @@
 html 
     head    
         title EduNet 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     body.bg-light
-        nav.navbar.navbar-expand-lg.navbar-dark(style="background:#718093").shadow-sm
-            .container 
+        nav.navbar.navbar-expand-lg.navbar-dark(style="background:#718093").shadow-sm.fixed-top.mb-5
+            .container
                 a.navbar-brand(href="") EduNet
                 
                 form(action="").mx-auto.d-flex.mt-3
@@ -20,6 +21,9 @@ html
                         a.nav-link(href="") Login 
                     li.nav-item 
                         a.nav-link(href="") register 
+        br
+        br
+        br
+        br
 
-
-        block content  
+        block content

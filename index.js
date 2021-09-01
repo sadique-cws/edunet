@@ -4,6 +4,13 @@ var session = require("express-session")
 
 var flash = require("express-flash")
 var cookie = require("cookie-parser")
+
+
+app.use(session({secret:"hello"}))
+//json parser
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+
 var route = require("./url.js");
 
 //static directories
@@ -20,9 +27,6 @@ app.set("views","./views");
 app.set("view engine","pug")
 
 
-//json parser
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
 
 //session and cookie
 app.use(flash())

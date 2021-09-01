@@ -3,6 +3,7 @@ var conn = require("./lib/db");
 var router = express.Router()
 var multer = require("multer")
 var path = require("path");
+const { nextTick } = require('process');
 
 //image uploading setup
 var storage = multer.diskStorage({
@@ -58,6 +59,51 @@ router.post("/insert",upload.single("image"),(req,res)=>{
     })
 })
 
+router.get("/login",(req,res)=>{
+    return res.render("login");
+})
 
+router.get("/register",(req,res)=>{
+    req.session.user = "alok@gmail.com"
+    console.log(req.session.user)
+    return res.render("register");
+})
+
+var Users = [];
+
+router.post("/register",(req,res)=>{
+    if(! req.body.email || ! req.body.password){
+        res.status("400");
+        res.send("Invalid Details");
+    }
+    else{
+        Users.filter(function(user){
+            if(user.email === req.body.email){
+                res.render("register",{
+                    message:"User already Exist! login or choose another user"
+                })
+            }
+        });
+        var newUser = {email: req.body.email , password: req.body.password}
+            Users.push(newUser);
+            req.session.user = newUser;
+            res.redirect("/protected_page");
+    }
+
+});
+
+router.get("/protected_page",checkSignIn,(req,res)=>{
+    res.render("profile",{email:req.session.user.email})
+})
+function checkSignIn(req,res,next){
+    if(req.session.user){
+        next();
+    }
+    else{
+        var err = new Error("not logged in!");
+        console.log(req.session.user);
+        next(err);
+    }
+}
 
 module.exports = router

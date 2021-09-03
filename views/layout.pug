@@ -17,10 +17,17 @@ html
                         a.nav-link(href="") Home 
                     li.nav-item 
                         a.nav-link(href="") About 
-                    li.nav-item 
-                        a.nav-link(href="") Login 
-                    li.nav-item 
-                        a.nav-link(href="") register 
+                    if (session.user)
+                        li.nav-item 
+                            a.nav-link(href="/logout") logout 
+                        li.nav-item 
+                            a.nav-link(href="/protected_page") Profile 
+                    else 
+                        li.nav-item 
+                            a.nav-link(href="/login") Login 
+                        li.nav-item 
+                            a.nav-link(href="/register") register 
+                        
         br
         br
         br

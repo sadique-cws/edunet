@@ -17,7 +17,15 @@ var route = require("./url.js");
 app.use(express.static("public"));
 app.use(express.static("photos"));
 
+app.use("/protected_page",function(err,req,res,next){
+    console.log(err);
+    res.redirect("/login");
+})
 
+app.use(function(req,res,next){
+    res.locals.session = req.session;
+    next();
+});
 
 //route config
 app.use("/",route);

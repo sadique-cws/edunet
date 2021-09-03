@@ -5,6 +5,10 @@ var multer = require("multer")
 var path = require("path");
 const { nextTick } = require('process');
 
+var bcrypt = require('bcrypt');
+
+const slatRounds = 10;
+
 //image uploading setup
 var storage = multer.diskStorage({
     destination:function(req,file,cb){
@@ -63,38 +67,76 @@ router.get("/login",(req,res)=>{
     return res.render("login");
 })
 
+router.post("/login",async (req,res) => {
+    
+    if(!req.body.email || !req.body.password){
+        res.render("login",{message:"please enter email and password"})
+    }
+    else{
+       sql = "select * from users where email = ?";
+
+       const password = req.body.password;
+       conn.query(sql,[req.body.email], async (err, result) => {
+        if (err) throw err;
+        const compare = await bcrypt.compare(password,result[0].password);
+
+        if(compare){
+            if(result.length > 0){
+                req.session.user = req.body.email;
+                res.redirect("/protected_page");
+           }
+           
+        }
+        else{
+            res.render("login",{message:"invalid Credentials"})
+           }
+       })
+        
+    }
+});
+
+router.get("/logout",(req,res) => {
+    req.session.destroy(function(){
+        console.log("user logged out successflly ");
+    })
+
+    res.redirect("/login");
+})
+
 router.get("/register",(req,res)=>{
-    req.session.user = "alok@gmail.com"
     console.log(req.session.user)
     return res.render("register");
 })
 
-var Users = [];
-
-router.post("/register",(req,res)=>{
+router.post("/register",async (req,res)=>{
     if(! req.body.email || ! req.body.password){
         res.status("400");
         res.send("Invalid Details");
     }
     else{
-        Users.filter(function(user){
-            if(user.email === req.body.email){
-                res.render("register",{
-                    message:"User already Exist! login or choose another user"
-                })
-            }
-        });
-        var newUser = {email: req.body.email , password: req.body.password}
-            Users.push(newUser);
-            req.session.user = newUser;
+        //creating user 
+        sql = "insert into users (name,email,password) value (?,?,?)";
+
+        //encryption
+        const password = req.body.password;
+        const encryptedPassword = await bcrypt.hash(password,slatRounds);
+
+        conn.query(sql,[req.body.name,req.body.email,encryptedPassword],(err,result)=>{
+            if (err) throw err;
+        })
+       
+            req.session.user = req.body.email;
             res.redirect("/protected_page");
     }
 
 });
 
+
 router.get("/protected_page",checkSignIn,(req,res)=>{
     res.render("profile",{email:req.session.user.email})
 })
+
+
 function checkSignIn(req,res,next){
     if(req.session.user){
         next();
@@ -102,7 +144,9 @@ function checkSignIn(req,res,next){
     else{
         var err = new Error("not logged in!");
         console.log(req.session.user);
+        res.redirect("/login");
         next(err);
+
     }
 }
 
